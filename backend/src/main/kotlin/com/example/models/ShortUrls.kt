@@ -1,7 +1,7 @@
 package com.example.models
 
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
+
 
 object ShortUrls : Table("short_urls") {
     val id = uuid("id").autoGenerate()
@@ -11,4 +11,3 @@ object ShortUrls : Table("short_urls") {
 
     override val primaryKey = PrimaryKey(id)
 }
-

@@ -3,9 +3,6 @@ package com.example
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import java.sql.Connection
-import com.example.Urls
 import com.example.models.ShortUrls
 
 

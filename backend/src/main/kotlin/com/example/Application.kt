@@ -1,15 +1,13 @@
 package com.example
 
-import com.example.controllers.UrlController
+import com.example.controller.UrlController
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import com.example.dao.ShortUrlDao
 import io.ktor.http.*
 import io.ktor.server.request.*
-
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
@@ -19,33 +17,32 @@ fun main() {
 
 fun Application.module() {
     DatabaseFactory.init()
-    val dao = ShortUrlDao()
+    val controller = UrlController()
+
     routing {
-        val controller = UrlController()
-
         post("/shorten") {
-            try {
-                val params = call.receiveParameters()
-                val originalUrl = params["url"] ?: return@post call.respondText("Missing URL", status = HttpStatusCode.BadRequest)
-                val shortUrl = controller.shortenUrl(originalUrl)
-                call.respondText("Shortened URL: http://localhost:8080/${shortUrl.shortCode}")
-            } catch (e: Exception) {
-                e.printStackTrace()
-                call.respondText("Internal Server Error: ${e.message}", status = HttpStatusCode.InternalServerError)
-            }
-        }
-
-        /* post("/shorten") {
             val params = call.receiveParameters()
             val originalUrl =
                 params["url"] ?: return@post call.respondText("Missing URL", status = HttpStatusCode.BadRequest)
             val shortUrl = controller.shortenUrl(originalUrl)
-            call.respondText("Shortened URL: http://localhost:8080/${shortUrl.shortCode}")
-        } */
+            call.respondText("Shortened URL: http://localhost:8080/s/${shortUrl.shortCode}")
+        }
 
-        get("/{code}") {
+        get("/s/{code}") {
             val code = call.parameters["code"]
-            val shortUrl = code?.let { controller.getOriginalUrl(it) }
+            println("Recebido código: $code")  // debug
+
+            if (code == null) {
+                call.respondText("Código não fornecido", status = HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            if (code.contains("http")) {
+                call.respondText("Código inválido", status = HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            val shortUrl = controller.getOriginalUrl(code)
 
             if (shortUrl == null) {
                 call.respondText("Not Found", status = HttpStatusCode.NotFound)
@@ -55,4 +52,5 @@ fun Application.module() {
         }
 
     }
+
 }
