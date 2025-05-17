@@ -30,7 +30,7 @@ fun Application.module() {
 
         get("/s/{code}") {
             val code = call.parameters["code"]
-            println("Recebido código: $code")  // debug
+            println("Recebido código: $code")
 
             if (code == null) {
                 call.respondText("Código não fornecido", status = HttpStatusCode.BadRequest)

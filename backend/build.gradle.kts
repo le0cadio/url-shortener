@@ -21,6 +21,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-tests:2.3.3")
 
+    implementation("org.slf4j:slf4j-simple:2.0.13")
 
     implementation("org.jetbrains.exposed:exposed-core:0.50.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.50.1")
