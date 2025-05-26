@@ -50,7 +50,20 @@ fun Application.module() {
                 call.respondRedirect(shortUrl.originalUrl)
             }
         }
+        delete("/s/d/{code}") {
+            val code = call.parameters["code"]
+            println("Recebido código para deletar: $code")
 
+            if (code == null) {
+                call.respondText("Código não fornecido", status = HttpStatusCode.BadRequest)
+                return@delete
+            }
+
+            if (code.contains("http")) {
+                call.respondText("Código Inválido", status = HttpStatusCode.BadRequest)
+                
+            }
+        }
     }
 
 }
