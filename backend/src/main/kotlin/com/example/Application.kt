@@ -61,7 +61,7 @@ fun Application.module() {
 
             if (code.contains("http")) {
                 call.respondText("Código Inválido", status = HttpStatusCode.BadRequest)
-                
+
             }
         }
     }
